@@ -1,0 +1,17 @@
+# Push Block
+entities.canyon/pushblock.placements.name.PushBlock=Push Block (Canyon)
+entities.canyon/pushblock.attributes.description.stickyTop=Whether the top part is sticky.
+entities.canyon/pushblock.attributes.description.stickyBottom=Whether the bottom part is sticky.
+entities.canyon/pushblock.attributes.description.stickyLeft=Whether the left part is sticky.
+entities.canyon/pushblock.attributes.description.stickyRight=Whether the right part is sticky.
+entities.canyon/pushblock.attributes.description.isTemple=Whether it uses the temple sprite rather than the default.
+
+# Spin Orb
+entities.canyon/spinorb.placements.name.SpinOrb=Spin Orb (Canyon)
+
+# Toggle Block
+entities.canyon/toggleblock.placements.name.ToggleBlock=Toggle Block (Canyon)
+entities.canyon/toggleblock.attributes.description.travelSpeed=How fast the block moves (1/speed seconds to cover entire path).
+entities.canyon/toggleblock.attributes.description.oscillate=Whether the block should go backwards after reaching the end node.
+entities.canyon/toggleblock.attributes.description.stopAtEnd=Whether the block should be locked in place after reaching the end node.
+entities.canyon/toggleblock.attributes.description.customTexturePath=A custom texture for the block frame (starts from Gameplay/).

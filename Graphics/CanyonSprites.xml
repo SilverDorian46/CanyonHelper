@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Sprites>
+
+  <spinorb path="objects/canyon/spinorb/" start="idle">
+    <Justify x="0.5" y="0.5"/>
+    <Loop id="idle" path="idle" frames="0-0" delay="0.2"/>
+    <Anim id="playerenter" path="enter" frames="0-2" delay="0.2" goto="active"/>
+    <Loop id="active" path="active" frames="0-2" delay="0.2"/>
+  </spinorb>
+
+  <toggleBlockLightRed path="objects/canyon/toggleblock/" start="idle">
+    <Justify x="0.5" y="0.5"/>
+    <Loop id="moving" path="middleRed" delay="0.08" frames="0-3"/>
+    <Loop id="idle" path="middleRed" delay="0.08" frames="0"/>
+  </toggleBlockLightRed>
+
+  <toggleBlockLaser path="objects/canyon/toggleblock/" start="idle">
+    <Justify x="0.5" y="0.5"/>
+    <Loop id="idle" path="laser" delay="0.08" frames="0"/>
+  </toggleBlockLaser>
+  
+  <monster path="cutscenes/canyon/monster/" start="idle">
+    <Justify x=".5" y="1" />
+    <Anim id="idle" path="monster" delay="0.1" frames="0-5"/>
+  </monster>
+
+  <pebble path="characters/pebble/" start="idle">
+    <Justify x=".5" y="1" />
+    <Loop id="idle" path="idle" delay="0.5" frames="0-1"/>
+  </pebble>
+
+</Sprites>

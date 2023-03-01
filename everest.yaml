@@ -1,0 +1,6 @@
+- Name: CanyonHelper
+  Version: 1.1.4
+  DLL: Code/bin/CanyonHelper.dll
+  Dependencies:
+    - Name: Everest
+      Version: 1.1067.0
