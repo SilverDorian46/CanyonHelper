@@ -2,5 +2,5 @@
   Version: 1.1.4
   DLL: Code/bin/CanyonHelper.dll
   Dependencies:
-    - Name: Everest
+    - Name: EverestCore
       Version: 1.4465.0
