@@ -7,17 +7,17 @@ namespace Celeste.Mod.CanyonHelper
 {
     class PushBlock : Solid
     {
-        private MTexture texture;
-        private MTexture[] stickyTextures;
+        private readonly MTexture texture;
+        private readonly MTexture[] stickyTextures;
         private float speedX = 0;
         private float speedY = 0;
         private Level level;
         private Player playerEnt;
 
-        private bool stickyTop = false;
-        private bool stickyBottom = false;
-        private bool stickyLeft = false;
-        private bool stickyRight = false;
+        private readonly bool stickyTop = false;
+        private readonly bool stickyBottom = false;
+        private readonly bool stickyLeft = false;
+        private readonly bool stickyRight = false;
 
         private bool lastTouchingGround = true;
         private bool touchingGround;
@@ -25,8 +25,8 @@ namespace Celeste.Mod.CanyonHelper
         private bool touchingRightWall;
         private bool touchingCeiling;
 
-        private bool isTemple = false;
-        private char breakDebrisTileset = '5';
+        private readonly bool isTemple = false;
+        private readonly char breakDebrisTileset = '5';
 
         private float gravity = 0;
         private bool applyGravity = false;
@@ -36,11 +36,21 @@ namespace Celeste.Mod.CanyonHelper
 
         private DashSwitch[] dashSwitches;
 
-        private MTexture[] stickyTextureArray = new MTexture[4];
+        private readonly MTexture[] stickyTextureArray = new MTexture[4];
+
+        private readonly bool legacy;
+        private readonly string blockTexture;
+        private readonly string gooTexture;
 
         public PushBlock(EntityData data, Vector2 offset) : base(data.Position + offset, 32, 32, false)
         {
-            stickyTextures = GFX.Game.GetAtlasSubtextures("objects/canyon/pushblock/stickyGoo").ToArray();
+            // Added support for custom textures
+            string customBlockTexture = data.Attr("customBlockTexture");
+            string customGooTexture = data.Attr("customGooTexture");
+            blockTexture = string.IsNullOrEmpty(customBlockTexture) ? "objects/canyon/pushblock/idle" : customBlockTexture;
+            gooTexture = string.IsNullOrEmpty(customGooTexture) ? "objects/canyon/pushblock/stickyGoo" : customGooTexture;
+
+            stickyTextures = GFX.Game.GetAtlasSubtextures(gooTexture).ToArray();
             OnDashCollide = new DashCollision(OnDashed);
             Collider.Center = Vector2.Zero;
 
@@ -51,12 +61,15 @@ namespace Celeste.Mod.CanyonHelper
 
             isTemple = data.Bool("isTemple", false);
 
+            // Added a legacy option which is on for every placement before this update, and off by default for any future placements.
+            legacy = data.Bool("legacy", !data.Has("legacy"));
+
             for (int i = 0; i < stickyTextureArray.Length; i++)
             {
                 stickyTextureArray[i] = Calc.Random.Choose(stickyTextures);
             }
 
-            string texturePath = "objects/canyon/pushblock/" + (isTemple ? "idleTemple" : "idle");
+            string texturePath = blockTexture + (isTemple ? "Temple" : "");
             texture = GFX.Game[texturePath];
             if (isTemple)
             {
@@ -68,7 +81,7 @@ namespace Celeste.Mod.CanyonHelper
         {
             base.Added(scene);
             level = SceneAs<Level>();
-            dashSwitches = scene.Entities.OfType<DashSwitch>().ToArray<DashSwitch>();
+            dashSwitches = scene.Entities.OfType<DashSwitch>().ToArray();
         }
 
         private DashCollisionResults OnDashed(Player player, Vector2 direction)
@@ -135,26 +148,24 @@ namespace Celeste.Mod.CanyonHelper
                 {
                     ScrapeParticles(Vector2.UnitY);
                 }
-                else
+                else if (speedY < 0f)
                 {
-                    if (speedY < 0f)
-                    {
-                        ScrapeParticles(-Vector2.UnitY);
-                    }
+                    ScrapeParticles(-Vector2.UnitY);
                 }
                 if (speedX > 0f)
                 {
                     ScrapeParticles(Vector2.UnitX);
                 }
-                else
+                else if (speedX < 0f)
                 {
-                    if (speedX < 0f)
-                    {
-                        ScrapeParticles(-Vector2.UnitX);
-                    }
+                    ScrapeParticles(-Vector2.UnitX);
                 }
             }
-            MoveHExactCollideSolids((int)Math.Floor(speedX * Engine.DeltaTime), false, null);
+
+            if (legacy)
+                MoveHExactCollideSolids((int)Math.Floor(speedX * Engine.DeltaTime), false, null);
+            else
+                MoveHCollideSolids(speedX * Engine.DeltaTime, false);
             if (speedX != 0)
             {
                 speedX = Calc.Approach(speedX, 0, 960 * Engine.DeltaTime);
@@ -166,7 +177,10 @@ namespace Celeste.Mod.CanyonHelper
                 Calc.Approach(speedX, 24f, 500f * Engine.DeltaTime * 0.25f);
             }
 
-            MoveVExactCollideSolids((int)Math.Floor((speedY + (applyGravity ? gravity : 0f)) * Engine.DeltaTime), false, null);
+            if (legacy)
+                MoveVExactCollideSolids((int)Math.Floor((speedY + (applyGravity ? gravity : 0f)) * Engine.DeltaTime), false, null);
+            else
+                MoveVCollideSolids((speedY + gravity) * Engine.DeltaTime, false);
             if (speedY != 0)
             {
                 if (Top < level.Bounds.Top)
@@ -229,7 +243,7 @@ namespace Celeste.Mod.CanyonHelper
             if (dir.X != 0f)
             {
                 int x = 0;
-                while (x < Width)
+                while ((legacy && x < Width) || x <= Width)
                 {
                     Vector2 bottomPos = new Vector2(Left + x, Bottom + 1);
                     if (Scene.CollideCheck<Solid>(bottomPos))
@@ -247,7 +261,7 @@ namespace Celeste.Mod.CanyonHelper
             else
             {
                 int y = 0;
-                while (y < Height)
+                while ((legacy && y < Height) || y <= Height)
                 {
                     Vector2 leftPos = new Vector2(Left - 1, Top + y);
                     if (Scene.CollideCheck<Solid>(leftPos))
@@ -400,7 +414,7 @@ namespace Celeste.Mod.CanyonHelper
                     {
                         for (int i = 1; i < 7; i++)
                         {
-                            Scene.Add(Engine.Pooler.Create<Debris>().Init(TopRight + new Vector2(1, i * 4), breakDebrisTileset).BlastFrom(TopLeft - TopCenter - from));
+                            Scene.Add(Engine.Pooler.Create<Debris>().Init(TopRight + new Vector2(1, i * 4), breakDebrisTileset).BlastFrom(legacy ? (TopLeft - TopCenter - from) : (TopLeft - TopCenter + from)));
                         }
                         delayBetweenImpactEffect = maxDelay;
                     }

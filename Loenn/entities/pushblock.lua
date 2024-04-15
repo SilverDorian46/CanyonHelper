@@ -12,45 +12,58 @@ pushblock.placements =
         ["stickyBottom"] = false,
         ["stickyLeft"] = false,
         ["stickyRight"] = false,
-        ["isTemple"] = false
+        ["isTemple"] = false,
+        legacy = false,
+        customBlockTexture = "",
+        customGooTexture = ""
     }
 }
 
-local blockTexture = "objects/canyon/pushblock/idle"
-local blockTempleTexture = "objects/canyon/pushblock/idleTemple"
-local gooTexture = "objects/canyon/pushblock/stickyGoo00"
+local function getBlockTexture(entity)
+    local data = entity.customBlockTexture
+    local block = (data == nil or data == "") and "objects/canyon/pushblock/idle" or data
+    
+    return block
+end
+
+local function getGooTexture(entity)
+    local data = entity.customGooTexture
+    local goo = (data == nil or data == "") and "objects/canyon/pushblock/stickyGoo00" or data .. "00"
+    
+    return goo
+end
 
 function pushblock.sprite(room, entity)
     local sprites = {}
 
     if entity.isTemple then
-        local blockSprite = drawableSprite.fromTexture(blockTempleTexture, entity)
+        local blockSprite = drawableSprite.fromTexture(getBlockTexture(entity) .. "Temple", entity)
         table.insert(sprites, blockSprite)
     else
-        local blockSprite = drawableSprite.fromTexture(blockTexture, entity)
+        local blockSprite = drawableSprite.fromTexture(getBlockTexture(entity), entity)
         table.insert(sprites, blockSprite)
     end
 
     if entity.stickyTop then
-        local gooSprite = drawableSprite.fromTexture(gooTexture, entity)
+        local gooSprite = drawableSprite.fromTexture(getGooTexture(entity), entity)
         gooSprite:setJustification(0.5, 0.5)
         gooSprite.rotation = 0
         table.insert(sprites, gooSprite)
     end
     if entity.stickyBottom then
-        local gooSprite = drawableSprite.fromTexture(gooTexture, entity)
+        local gooSprite = drawableSprite.fromTexture(getGooTexture(entity), entity)
         gooSprite:setJustification(0.5, 0.5)
         gooSprite.rotation = math.pi
         table.insert(sprites, gooSprite)
     end
     if entity.stickyLeft then
-        local gooSprite = drawableSprite.fromTexture(gooTexture, entity)
+        local gooSprite = drawableSprite.fromTexture(getGooTexture(entity), entity)
         gooSprite:setJustification(0.5, 0.5)
         gooSprite.rotation = -math.pi / 2
         table.insert(sprites, gooSprite)
     end
     if entity.stickyRight then
-        local gooSprite = drawableSprite.fromTexture(gooTexture, entity)
+        local gooSprite = drawableSprite.fromTexture(getGooTexture(entity), entity)
         gooSprite:setJustification(0.5, 0.5)
         gooSprite.rotation = math.pi / 2
         table.insert(sprites, gooSprite)

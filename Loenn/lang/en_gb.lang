@@ -5,6 +5,9 @@ entities.canyon/pushblock.attributes.description.stickyBottom=Whether the bottom
 entities.canyon/pushblock.attributes.description.stickyLeft=Whether the left part is sticky.
 entities.canyon/pushblock.attributes.description.stickyRight=Whether the right part is sticky.
 entities.canyon/pushblock.attributes.description.isTemple=Whether it uses the temple sprite rather than the default.
+entities.canyon/pushblock.attributes.description.legacy=Whether this entity should have old functionality.\nThe current entity has received some physics tweaks, including fixing a bug where the block travels further when pushed left versus when pushed right.\nOn by default for every placement before the fix.
+entities.canyon/pushblock.attributes.description.customBlockTexture=A custom path relative to Graphics/Atlases/Gameplay/ for the texture of the block.\nIf the "isTemple" attribute is checked, the texture suffixed with "Temple" is used.\nDefault path: "objects/canyon/pushblock/idle"
+entities.canyon/pushblock.attributes.description.customGooTexture=A custom path relative to Graphics/Atlases/Gameplay/ for the subtextures of the sticky goo.\nThe subtextures are chosen at random, and each one is suffixed with a number from "00" to "03".\nOnly visible when at least one of the "sticky" attributes is checked.\nDefault path: "objects/canyon/pushblock/stickyGoo"
 
 # Spin Orb
 entities.canyon/spinorb.placements.name.SpinOrb=Spin Orb (Canyon)
