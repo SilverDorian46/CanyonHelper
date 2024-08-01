@@ -75,6 +75,12 @@ namespace Celeste.Mod.CanyonHelper
             {
                 breakDebrisTileset = 'f';
             }
+
+            // Override debris data if enabled.
+            if (data.Bool("overrideDebris"))
+            {
+                breakDebrisTileset = data.Char("customDebrisFromTileset");
+            }
         }
 
         public override void Added(Scene scene)

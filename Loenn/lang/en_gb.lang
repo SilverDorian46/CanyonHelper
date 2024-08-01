@@ -8,6 +8,8 @@ entities.canyon/pushblock.attributes.description.isTemple=Whether it uses the te
 entities.canyon/pushblock.attributes.description.legacy=Whether this entity should have old functionality.\nThe current entity has received some physics tweaks, including fixing a bug where the block travels further when pushed left versus when pushed right.\nOn by default for every placement before the fix.
 entities.canyon/pushblock.attributes.description.customBlockTexture=A custom path relative to Graphics/Atlases/Gameplay/ for the texture of the block.\nIf the "isTemple" attribute is checked, the texture suffixed with "Temple" is used.\nDefault path: "objects/canyon/pushblock/idle"
 entities.canyon/pushblock.attributes.description.customGooTexture=A custom path relative to Graphics/Atlases/Gameplay/ for the subtextures of the sticky goo.\nThe subtextures are chosen at random, and each one is suffixed with a number from "00" to "03".\nOnly visible when at least one of the "sticky" attributes is checked.\nDefault path: "objects/canyon/pushblock/stickyGoo"
+entities.canyon/pushblock.attributes.description.overrideDebris=Whether to override the debris spawned upon being dashed into, with custom debris data.
+entities.canyon/pushblock.attributes.description.customDebrisFromTileset=The debris associated with a tileset, to spawn upon being dashed into.\nFor custom tilesets, this is declared using the "debris" attribute in the XML.\nOnly in effect when the "overrideDebris" attribute is checked.
 
 # Spin Orb
 entities.canyon/spinorb.placements.name.SpinOrb=Spin Orb (Canyon)

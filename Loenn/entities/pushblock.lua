@@ -1,9 +1,12 @@
 local drawableSprite = require("structs.drawable_sprite")
+local fakeTilesHelper = require("helpers.fake_tiles")
 local utils = require("utils")
+
 local pushblock = {}
 
 pushblock.name = "canyon/pushblock"
 pushblock.depth = -9999
+pushblock.fieldInformation = fakeTilesHelper.getFieldInformation("customDebrisFromTileset")
 pushblock.placements = 
 {
     name = "PushBlock",
@@ -15,7 +18,9 @@ pushblock.placements =
         ["isTemple"] = false,
         legacy = false,
         customBlockTexture = "",
-        customGooTexture = ""
+        customGooTexture = "",
+        overrideDebris = false,
+        customDebrisFromTileset = "5"
     }
 }
 
